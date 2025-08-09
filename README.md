@@ -1,6 +1,8 @@
-# 🗓️ [MERN Project] Event Backend API
+# 🗓️ [MERN Project] EVENTRE Backend API
 
 A scalable and RESTful backend API for managing events, built with **Node.js**, **Express.js**, and **MongoDB**. Designed to handle event creation, user authentication, registration, and more — fully deployed and accessible via **Vercel**.
+
+> API documentation with Swagger is [here](https://api-eventre.vercel.app/api-docs/)
 
 ---
 
@@ -40,11 +42,15 @@ npm run dev
 
 Server will start at http://localhost:3000
 
+---
+
 ## 🌐 Live Deployment
 
-This Project has been deployed to [Vercel](https://api-mern-event.vercel.app/)
+This Project has been deployed to [Vercel](https://api-eventre.vercel.app/)
 
 Use tools like Postman or Hoppscotch to interact with the API.
+
+---
 
 ## 🙋‍♀️ Author
 
