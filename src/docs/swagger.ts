@@ -25,8 +25,18 @@ const doc = {
     },
     schemas: {
       LoginRequest: {
-        identifier: "radiva",
-        password: "nanana",
+        identifier: "mandy",
+        password: "Secret101%",
+      },
+      RegisterRequest: {
+        fullName: "Mandyoso",
+        username: "mandy",
+        email: "mandyoso@yopmail.com",
+        password: "Secret101%",
+        confirmPassword: "Secret101%",
+      },
+      ActivationRequest: {
+        code: "xyz",
       },
     },
   },

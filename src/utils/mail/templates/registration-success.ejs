@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>MERN Event - User Activation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .container {
+        width: 600px;
+        margin: 2px auto;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      .header {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+      }
+      .content {
+        padding: 20px;
+      }
+      .footer {
+        background-color: #f1f1f1;
+        color: #555;
+        padding: 10px;
+        text-align: center;
+        font-size: 12px;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 20px 0;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        border: 1px solid #4caf50;
+        background-color: #4caf50;
+      }
+      @media (max-width: 600px) {
+        .container {
+          width: 100%;
+          margin: 0;
+          border-radius: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Welcome</h1>
+      </div>
+      <div class="content">
+        <p>Hello, <%= username %></p>
+        <p>
+          Thank You for your registration, there are some informations from your
+          account :
+        </p>
+        <ul>
+          <li><strong>Name: </strong> <%= fullName %></li>
+          <li><strong>Email: </strong> <%= email %></li>
+          <li><strong>Registration Date: </strong> <%= createdAt %></li>
+        </ul>
+        <p>For starting, please click the button bellow:</p>
+        <a href="<%= activationLink %>" class="button">Activate Account</a>
+        <p>If you have any quest ions, feel free to contact us.</p>
+        <p>Best Regards, Eventre.</p>
+      </div>
+      <div class="footer">
+        <p>&copy; EVENTRE - Event Management System. All right reserved.</p>
+      </div>
+    </div>
+  </body>
+</html>
