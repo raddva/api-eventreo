@@ -2,12 +2,12 @@
   "openapi": "3.0.0",
   "info": {
     "version": "v0.0.1",
-    "title": "MERN Event API",
-    "description": "API documentation for MERN Event Back-end"
+    "title": "EVENTREO API",
+    "description": "API documentation for Eventreo"
   },
   "servers": [
     {
-      "url": "https://api-mern-event.vercel.app/api",
+      "url": "https://api-eventreo.vercel.app/api",
       "description": "Production server"
     },
     {
@@ -18,9 +18,7 @@
   "paths": {
     "/auth/register": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "description": "",
         "responses": {
           "200": {
@@ -49,9 +47,7 @@
     },
     "/auth/login": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "description": "",
         "responses": {
           "200": {
@@ -83,9 +79,7 @@
     },
     "/auth/profile": {
       "get": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "description": "",
         "parameters": [
           {
@@ -116,9 +110,7 @@
     },
     "/auth/activation": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "description": "",
         "parameters": [
           {

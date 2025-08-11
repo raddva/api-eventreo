@@ -3,12 +3,12 @@ import swaggerAutogen from "swagger-autogen";
 const doc = {
   info: {
     version: "v0.0.1",
-    title: "MERN Event API",
-    description: "API documentation for MERN Event Back-end",
+    title: "EVENTREO API",
+    description: "API documentation for Eventreo",
   },
   servers: [
     {
-      url: "https://api-mern-event.vercel.app/api",
+      url: "https://api-eventreo.vercel.app/api",
       description: "Production server",
     },
     {
