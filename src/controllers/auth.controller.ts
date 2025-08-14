@@ -4,6 +4,7 @@ import UserModel from "../models/user.model";
 import { encrypt } from "../utils/encryption";
 import { generateToken } from "../utils/jwt";
 import { IReqUser } from "../utils/interfaces";
+import response from "../utils/response";
 
 type TRegister = {
   fullName: string;
@@ -75,13 +76,9 @@ export default {
         password,
       });
 
-      res.status(200).json({
-        message: "Registration successful",
-        data: result,
-      });
+      response.success(res, result, "Registration successful");
     } catch (e) {
-      const err = e as unknown as Error;
-      res.status(400).json({ message: err.message, data: null });
+      response.error(res, e, "Registration Failed");
     }
   },
   async login(req: Request, res: Response) {
@@ -107,14 +104,14 @@ export default {
       });
 
       if (!userByIdentifier) {
-        return res.status(403).json({ message: "User not found", data: null });
+        return response.unauthorized(res, "User not found");
       }
 
       const validatedPassword: boolean =
         encrypt(password) === userByIdentifier.password;
 
       if (!validatedPassword) {
-        return res.status(403).json({ message: "User not found", data: null });
+        return response.unauthorized(res, "User not found");
       }
 
       const token = generateToken({
@@ -122,10 +119,9 @@ export default {
         role: userByIdentifier.role,
       });
 
-      return res.status(200).json({ message: "Login successful", data: token });
+      return response.success(res, token, "Login successful");
     } catch (e) {
-      const err = e as unknown as Error;
-      res.status(400).json({ message: err.message, data: null });
+      response.error(res, e, "Registration Failed");
     }
   },
 
@@ -140,12 +136,9 @@ export default {
       const user = req.user;
       const result = await UserModel.findById(user?.id);
 
-      return res
-        .status(200)
-        .json({ message: "Profile fetched successfully", data: result });
+      response.success(res, result, "Profile fetched successfully");
     } catch (e) {
-      const err = e as unknown as Error;
-      res.status(400).json({ message: err.message, data: null });
+      response.error(res, e, "Failed fetching profile data");
     }
   },
   async activation(req: Request, res: Response) {
@@ -164,13 +157,9 @@ export default {
         { new: true }
       );
 
-      res.status(200).json({
-        message: "User Account activated successfully",
-        data: user,
-      });
+      response.success(res, user, "User Account activated successfully");
     } catch (e) {
-      const err = e as unknown as Error;
-      res.status(400).json({ message: err.message, data: null });
+      response.error(res, e, "User Activation Failed");
     }
   },
 };
