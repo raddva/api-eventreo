@@ -1,0 +1,98 @@
+import { Response } from "express";
+import { IPaginationQuery, IReqUser } from "../utils/interfaces";
+import response from "../utils/response";
+import EventModel, { eventDAO, TEvent } from "../models/event.model";
+import { FilterQuery } from "mongoose";
+
+export default {
+  async create(req: IReqUser, res: Response) {
+    try {
+      const payload = { ...req.body, createdBy: req.user?.id } as TEvent;
+      await eventDAO.validate(payload);
+      const result = await EventModel.create(payload);
+      response.success(res, result, "Successfully created Event");
+    } catch (e) {
+      response.error(res, e, "Failed to create Event");
+    }
+  },
+  async findAll(req: IReqUser, res: Response) {
+    try {
+      const {
+        limit = 10,
+        page = 1,
+        search,
+      } = req.query as unknown as IPaginationQuery;
+
+      const query: FilterQuery<TEvent> = {};
+
+      if (search) {
+        Object.assign({
+          ...query,
+          $text: {
+            $search: search,
+          },
+        });
+      }
+      const result = await EventModel.find(query)
+        .limit(limit)
+        .skip((page - 1) * limit)
+        .sort({ createdAt: -1 })
+        .exec();
+
+      const count = await EventModel.countDocuments(query);
+
+      response.pagination(
+        res,
+        result,
+        {
+          current: page,
+          total: count,
+          totalPages: Math.ceil(count / limit),
+        },
+        "Successfully fetched event data"
+      );
+    } catch (e) {
+      response.error(res, e, "Failed to fetch Event Data");
+    }
+  },
+  async findOne(req: IReqUser, res: Response) {
+    try {
+      const { id } = req.params;
+      const result = await EventModel.findById(id);
+      response.success(res, result, "Successfully find Event");
+    } catch (e) {
+      response.error(res, e, "Failed to find Event");
+    }
+  },
+  async update(req: IReqUser, res: Response) {
+    try {
+      const { id } = req.params;
+      const result = await EventModel.findByIdAndUpdate(id, req.body, {
+        new: true,
+      });
+      response.success(res, result, "Successfully updated Event");
+    } catch (e) {
+      response.error(res, e, "Failed to update Event");
+    }
+  },
+  async remove(req: IReqUser, res: Response) {
+    try {
+      const { id } = req.params;
+      const result = await EventModel.findByIdAndDelete(id, {
+        new: true,
+      });
+      response.success(res, result, "Successfully removed Event");
+    } catch (e) {
+      response.error(res, e, "Failed to remove Event");
+    }
+  },
+  async findOneBySlug(req: IReqUser, res: Response) {
+    try {
+      const { slug } = req.params;
+      const result = await EventModel.findOne({ slug });
+      response.success(res, result, "Successfully find Event by slug");
+    } catch (e) {
+      response.error(res, e, "Failed to find Event");
+    }
+  },
+};
