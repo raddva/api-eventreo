@@ -2,7 +2,7 @@ import { Response } from "express";
 import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 import response from "../utils/response";
 import EventModel, { eventDAO, TEvent } from "../models/event.model";
-import { FilterQuery } from "mongoose";
+import { FilterQuery, isValidObjectId } from "mongoose";
 
 export default {
   async create(req: IReqUser, res: Response) {
@@ -76,7 +76,17 @@ export default {
     */
     try {
       const { id } = req.params;
+
+      if (!isValidObjectId(id)) {
+        return response.notFound(res, "Failed to find event");
+      }
+
       const result = await EventModel.findById(id);
+
+      if (!result) {
+        return response.notFound(res, "Failed to find event");
+      }
+
       response.success(res, result, "Successfully find Event");
     } catch (e) {
       response.error(res, e, "Failed to find Event");
@@ -97,6 +107,11 @@ export default {
     */
     try {
       const { id } = req.params;
+
+      if (!isValidObjectId(id)) {
+        return response.notFound(res, "Failed to update event");
+      }
+
       const result = await EventModel.findByIdAndUpdate(id, req.body, {
         new: true,
       });
@@ -114,6 +129,11 @@ export default {
     */
     try {
       const { id } = req.params;
+
+      if (!isValidObjectId(id)) {
+        return response.notFound(res, "Failed to remove eveny");
+      }
+
       const result = await EventModel.findByIdAndDelete(id, {
         new: true,
       });

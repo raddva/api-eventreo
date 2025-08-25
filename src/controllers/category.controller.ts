@@ -2,6 +2,7 @@ import { Response } from "express";
 import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 import CategoryModel, { categoryDAO } from "../models/category.model";
 import response from "../utils/response";
+import { isValidObjectId } from "mongoose";
 
 export default {
   async create(req: IReqUser, res: Response) {
@@ -76,7 +77,17 @@ export default {
     */
     try {
       const { id } = req.params;
+
+      if (!isValidObjectId(id)) {
+        return response.notFound(res, "Failed to find category");
+      }
+
       const result = await CategoryModel.findById(id);
+
+      if (!result) {
+        return response.notFound(res, "Failed to find category");
+      }
+
       response.success(res, result, "Successfully find category data");
     } catch (e) {
       response.error(res, e, "Failed to find category");
@@ -97,6 +108,11 @@ export default {
     */
     try {
       const { id } = req.params;
+
+      if (!isValidObjectId(id)) {
+        return response.notFound(res, "Failed to update category");
+      }
+
       const result = await CategoryModel.findByIdAndUpdate(id, req.body, {
         new: true,
       });
@@ -114,6 +130,11 @@ export default {
     */
     try {
       const { id } = req.params;
+
+      if (!isValidObjectId(id)) {
+        return response.notFound(res, "Failed to remove category");
+      }
+
       const result = await CategoryModel.findByIdAndDelete(id, { new: true });
       response.success(res, result, "Successfully deleted category");
     } catch (e) {
