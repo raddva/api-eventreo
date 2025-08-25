@@ -85,6 +85,15 @@ export default {
   async update(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Events']
+      #swagger.security = [{
+       "bearerAuth": {}
+      }]
+      #swagger.requestBody = {
+        required: true,
+        schema: {
+          $ref: "#/components/schemas/CreateEventRequest"
+        }
+      }
     */
     try {
       const { id } = req.params;
@@ -102,12 +111,6 @@ export default {
       #swagger.security = [{
        "bearerAuth": {}
       }]
-      #swagger.requestBody = {
-        required: true,
-        schema: {
-          $ref: "#/components/schemas/CreateEventRequest"
-        }
-      }
     */
     try {
       const { id } = req.params;
@@ -122,9 +125,6 @@ export default {
   async findOneBySlug(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Events']
-      #swagger.security = [{
-      "bearerAuth": {}
-      }]
     */
     try {
       const { slug } = req.params;

@@ -59,6 +59,13 @@ const doc = {
         isFeatured: false,
         isPublish: false,
       },
+      CreateTicketRequest: {
+        price: 0,
+        name: "",
+        events: "eventId",
+        description: "",
+        quantity: 0,
+      },
       RemoveMediaRequest: {
         fileUrl: "",
       },
