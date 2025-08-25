@@ -4,6 +4,9 @@ import RegionModel from "../models/region.model";
 
 export default {
   async findByCity(req: Request, res: Response) {
+    /**
+      #swagger.tags = ['Region']
+    */
     try {
       const { name } = req.query;
       const result = await RegionModel.findByCity(`${name}`);
@@ -13,6 +16,9 @@ export default {
     }
   },
   async getAllProvinces(req: Request, res: Response) {
+    /**
+      #swagger.tags = ['Region']
+    */
     try {
       const result = await RegionModel.getAllProvinces();
       response.success(res, result, "success get all provinces");
@@ -21,6 +27,9 @@ export default {
     }
   },
   async getProvince(req: Request, res: Response) {
+    /**
+      #swagger.tags = ['Region']
+    */
     try {
       const { id } = req.params;
       const result = await RegionModel.getProvince(Number(id));
@@ -30,6 +39,9 @@ export default {
     }
   },
   async getRegency(req: Request, res: Response) {
+    /**
+      #swagger.tags = ['Region']
+    */
     try {
       const { id } = req.params;
       const result = await RegionModel.getRegency(Number(id));
@@ -39,6 +51,9 @@ export default {
     }
   },
   async getDistrict(req: Request, res: Response) {
+    /**
+      #swagger.tags = ['Region']
+    */
     try {
       const { id } = req.params;
       const result = await RegionModel.getDistrict(Number(id));
@@ -48,6 +63,9 @@ export default {
     }
   },
   async getVillage(req: Request, res: Response) {
+    /**
+      #swagger.tags = ['Region']
+    */
     try {
       const { id } = req.params;
       const result = await RegionModel.getVillage(Number(id));

@@ -154,7 +154,18 @@
         ],
         "requestBody": {
           "required": true,
-          "$ref": "#/components/schemas/CreateCategoryRequest"
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryRequest"
+              }
+            }
+          }
         }
       },
       "get": {
@@ -248,7 +259,18 @@
         ],
         "requestBody": {
           "required": true,
-          "$ref": "#/components/schemas/CreateCategoryRequest"
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryRequest"
+              }
+            }
+          }
         }
       },
       "delete": {
@@ -312,7 +334,18 @@
         ],
         "requestBody": {
           "required": true,
-          "$ref": "#/components/schemas/CreateEventRequest"
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEventRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEventRequest"
+              }
+            }
+          }
         }
       },
       "get": {
@@ -398,15 +431,6 @@
           "default": {
             "description": ""
           }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "$ref": "#/components/schemas/CreateEventRequest"
         }
       },
       "delete": {
@@ -440,7 +464,22 @@
           {
             "bearerAuth": {}
           }
-        ]
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEventRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEventRequest"
+              }
+            }
+          }
+        }
       }
     },
     "/events/{slug}/slug": {
@@ -463,7 +502,12 @@
           "default": {
             "description": ""
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       }
     },
     "/regions": {
@@ -849,6 +893,10 @@
                 "items": {
                   "type": "number"
                 }
+              },
+              "address": {
+                "type": "string",
+                "example": ""
               }
             }
           },
@@ -857,6 +905,10 @@
             "example": false
           },
           "isFeatured": {
+            "type": "boolean",
+            "example": false
+          },
+          "isPublish": {
             "type": "boolean",
             "example": false
           }

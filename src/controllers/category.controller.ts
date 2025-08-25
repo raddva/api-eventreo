@@ -5,6 +5,18 @@ import response from "../utils/response";
 
 export default {
   async create(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Category']
+      #swagger.security = [{
+       "bearerAuth": {}
+      }]
+      #swagger.requestBody = {
+        required: true,
+        schema: {
+          $ref: "#/components/schemas/CreateCategoryRequest"
+        }
+      }
+    */
     try {
       await categoryDAO.validate(req.body);
       const result = await CategoryModel.create(req.body);
@@ -14,6 +26,9 @@ export default {
     }
   },
   async findAll(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Category']
+    */
     const {
       page = 1,
       limit = 10,
@@ -56,6 +71,9 @@ export default {
     }
   },
   async findOne(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Category']
+    */
     try {
       const { id } = req.params;
       const result = await CategoryModel.findById(id);
@@ -65,6 +83,18 @@ export default {
     }
   },
   async update(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Category']
+      #swagger.security = [{
+       "bearerAuth": {}
+      }]
+      #swagger.requestBody = {
+        required: true,
+        schema: {
+          $ref: "#/components/schemas/CreateCategoryRequest"
+        }
+      }
+    */
     try {
       const { id } = req.params;
       const result = await CategoryModel.findByIdAndUpdate(id, req.body, {
@@ -76,6 +106,12 @@ export default {
     }
   },
   async remove(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Category']
+      #swagger.security = [{
+      "bearerAuth": {}
+      }]
+    */
     try {
       const { id } = req.params;
       const result = await CategoryModel.findByIdAndDelete(id, { new: true });

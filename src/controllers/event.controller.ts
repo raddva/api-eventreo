@@ -6,6 +6,18 @@ import { FilterQuery } from "mongoose";
 
 export default {
   async create(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Events']
+      #swagger.security = [{
+       "bearerAuth": {}
+      }]
+      #swagger.requestBody = {
+        required: true,
+        schema: {
+          $ref: "#/components/schemas/CreateEventRequest"
+        }
+      }
+    */
     try {
       const payload = { ...req.body, createdBy: req.user?.id } as TEvent;
       await eventDAO.validate(payload);
@@ -16,6 +28,9 @@ export default {
     }
   },
   async findAll(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Events']
+    */
     try {
       const {
         limit = 10,
@@ -56,6 +71,9 @@ export default {
     }
   },
   async findOne(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Events']
+    */
     try {
       const { id } = req.params;
       const result = await EventModel.findById(id);
@@ -65,6 +83,9 @@ export default {
     }
   },
   async update(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Events']
+    */
     try {
       const { id } = req.params;
       const result = await EventModel.findByIdAndUpdate(id, req.body, {
@@ -76,6 +97,18 @@ export default {
     }
   },
   async remove(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Events']
+      #swagger.security = [{
+       "bearerAuth": {}
+      }]
+      #swagger.requestBody = {
+        required: true,
+        schema: {
+          $ref: "#/components/schemas/CreateEventRequest"
+        }
+      }
+    */
     try {
       const { id } = req.params;
       const result = await EventModel.findByIdAndDelete(id, {
@@ -87,6 +120,12 @@ export default {
     }
   },
   async findOneBySlug(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Events']
+      #swagger.security = [{
+      "bearerAuth": {}
+      }]
+    */
     try {
       const { slug } = req.params;
       const result = await EventModel.findOne({ slug });
