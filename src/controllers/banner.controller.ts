@@ -40,13 +40,15 @@ export default {
       const query: FilterQuery<TBanner> = {};
 
       if (search) {
-        Object.assign({
-          ...query,
-          $text: {
-            $search: search,
-          },
+        Object.assign(query, {
+          $or: [
+            {
+              title: { $regex: search, $options: "i" },
+            },
+          ],
         });
       }
+
       const result = await BannerModel.find(query)
         .limit(limit)
         .skip((page - 1) * limit)

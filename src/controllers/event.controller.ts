@@ -41,13 +41,15 @@ export default {
       const query: FilterQuery<TEvent> = {};
 
       if (search) {
-        Object.assign({
-          ...query,
-          $text: {
-            $search: search,
-          },
+        Object.assign(query, {
+          $or: [
+            {
+              name: { $regex: search, $options: "i" },
+            },
+          ],
         });
       }
+
       const result = await EventModel.find(query)
         .limit(limit)
         .skip((page - 1) * limit)

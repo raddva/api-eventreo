@@ -1,18 +1,22 @@
-import { Types } from "mongoose";
-import jwt from "jsonwebtoken";
+import jwt, { TokenExpiredError, JsonWebTokenError } from "jsonwebtoken";
 import { SECRET } from "./env";
 import { IUserToken } from "./interfaces";
 
 export const generateToken = (user: IUserToken): string => {
-  const token = jwt.sign(user, SECRET, {
-    expiresIn: "1h",
-  });
-
-  return token;
+  return jwt.sign(user, SECRET, { expiresIn: "1h" });
 };
 
-export const getUserData = (token: string) => {
-  const user = jwt.verify(token, SECRET) as IUserToken;
-
-  return user;
+export const getUserData = (token: string): IUserToken => {
+  try {
+    const user = jwt.verify(token, SECRET) as IUserToken;
+    return user;
+  } catch (err) {
+    if (err instanceof TokenExpiredError) {
+      throw new Error("TOKEN_EXPIRED");
+    } else if (err instanceof JsonWebTokenError) {
+      throw new Error("TOKEN_INVALID");
+    } else {
+      throw err;
+    }
+  }
 };

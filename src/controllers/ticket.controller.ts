@@ -40,13 +40,15 @@ export default {
       const query: FilterQuery<TicketType> = {};
 
       if (search) {
-        Object.assign({
-          ...query,
-          $text: {
-            $search: search,
-          },
+        Object.assign(query, {
+          $or: [
+            {
+              name: { $regex: search, $options: "i" },
+            },
+          ],
         });
       }
+
       const result = await TicketModel.find(query)
         .populate("events")
         .limit(limit)
