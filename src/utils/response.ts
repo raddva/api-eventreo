@@ -58,10 +58,19 @@ export default {
       data: error,
     });
   },
-  unauthorized(res: Response, message: string = "unauthorized") {
+  unauthorized(res: Response, message: string = "Unauthorized") {
     res.status(403).json({
       meta: {
         status: 403,
+        message,
+      },
+      data: null,
+    });
+  },
+  notFound(res: Response, message: string = "Not Found") {
+    res.status(404).json({
+      meta: {
+        status: 404,
         message,
       },
       data: null,

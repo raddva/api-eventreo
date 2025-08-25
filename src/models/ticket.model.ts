@@ -4,8 +4,6 @@ import { EVENT_MODEL_NAME } from "./event.model";
 
 export const TICKET_MODEL_NAME = "Ticket";
 
-// const Schema = mongoose.Schema;
-
 export const ticketDAO = Yup.object({
   price: Yup.number().required(),
   name: Yup.string().required(),

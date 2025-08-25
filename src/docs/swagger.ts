@@ -66,6 +66,11 @@ const doc = {
         description: "",
         quantity: 0,
       },
+      CreateBannerRequest: {
+        title: "",
+        image: "",
+        isShow: false,
+      },
       RemoveMediaRequest: {
         fileUrl: "",
       },
