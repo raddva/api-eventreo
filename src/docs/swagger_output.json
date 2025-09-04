@@ -357,15 +357,45 @@
           {
             "name": "limit",
             "in": "query",
+            "default": 10,
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
             "name": "page",
             "in": "query",
+            "default": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "isOnline",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isFeatured",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isPublish",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
