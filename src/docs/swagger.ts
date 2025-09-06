@@ -74,6 +74,16 @@ const doc = {
       RemoveMediaRequest: {
         fileUrl: "",
       },
+      CreateOrderRequest: {
+        total: 0,
+        status: "PENDING",
+        payment: "",
+        events: "eventId",
+        orderId: "orderId",
+        ticket: "ticketId",
+        quantity: 1,
+        vouchers: "[{ voucherId: 'voucherId', isPrint: false }]",
+      },
     },
   },
 };

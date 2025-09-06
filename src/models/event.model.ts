@@ -1,5 +1,6 @@
 import mongoose, { ObjectId } from "mongoose";
 import * as Yup from "yup";
+import { USER_MODEL_NAME } from "./user.model";
 
 export const EVENT_MODEL_NAME = "Event";
 
@@ -77,7 +78,7 @@ const EventSchema = new Schema<Event>(
     createdBy: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "User",
+      ref: USER_MODEL_NAME,
     },
     slug: {
       type: Schema.Types.String,
