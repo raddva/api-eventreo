@@ -1,9 +1,15 @@
 import { Response } from "express";
 import { IReqUser } from "../utils/interfaces";
 import response from "../utils/response";
-import OrderModel, { orderDAO, TOrder } from "../models/order.model";
+import OrderModel, {
+  orderDAO,
+  OrderStatus,
+  TOrder,
+  TVoucher,
+} from "../models/order.model";
 import { FilterQuery, isValidObjectId } from "mongoose";
 import TicketModel from "../models/ticket.model";
+import { getId } from "../utils/id";
 
 export default {
   async create(req: IReqUser, res: Response) {
@@ -110,56 +116,73 @@ export default {
       response.error(res, e, "Failed to find Order");
     }
   },
-  async update(req: IReqUser, res: Response) {
+
+  async complete(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Orders']
-      #swagger.security = [{
-       "bearerAuth": {}
-      }]
-      #swagger.requestBody = {
-        required: true,
-        schema: {
-          $ref: "#/components/schemas/CreateOrderRequest"
+    */
+    try {
+      const { orderId } = req.params;
+      const userId = req.user?.id;
+
+      const order = await OrderModel.findOne({ orderId, createdBy: userId });
+      if (!order) return response.notFound(res, "Order not found");
+
+      if (order.status === "COMPLETED")
+        return response.success(res, order, "Order already completed");
+
+      const vouchers: TVoucher[] = Array.from(
+        { length: order.quantity },
+        () => {
+          return { voucherId: getId(), isPrint: false } as TVoucher;
         }
-      }
-    */
-    try {
-      const { id } = req.params;
+      );
 
-      if (!isValidObjectId(id)) {
-        return response.notFound(res, "Failed to update order");
-      }
+      const result = await OrderModel.findOneAndUpdate(
+        {
+          orderId,
+          createdBy: userId,
+        },
+        { vouchers, status: OrderStatus.COMPLETED },
+        { new: true }
+      );
 
-      const result = await OrderModel.findByIdAndUpdate(id, req.body, {
-        new: true,
-      });
-      response.success(res, result, "Successfully updated Order");
+      const ticket = await TicketModel.findById(order.ticket);
+      if (!ticket) return response.notFound(res, "Ticket not found");
+
+      await TicketModel.updateOne(
+        {
+          _id: ticket._id,
+        },
+        { quantity: ticket.quantity - order.quantity }
+      );
+
+      response.success(res, result, "Successfully complete Order");
     } catch (e) {
-      response.error(res, e, "Failed to update Order");
+      response.error(res, e, "Failed to complete Order");
     }
   },
-  async remove(req: IReqUser, res: Response) {
+
+  async pending(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Orders']
-      #swagger.security = [{
-       "bearerAuth": {}
-      }]
     */
     try {
-      const { id } = req.params;
-
-      if (!isValidObjectId(id)) {
-        return response.notFound(res, "Failed to remove eveny");
-      }
-
-      const result = await OrderModel.findByIdAndDelete(id, {
-        new: true,
-      });
-      response.success(res, result, "Successfully removed Order");
     } catch (e) {
-      response.error(res, e, "Failed to remove Order");
+      response.error(res, e, "Failed to pending Order");
     }
   },
+
+  async cancelled(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Orders']
+    */
+    try {
+    } catch (e) {
+      response.error(res, e, "Failed to cancel Order");
+    }
+  },
+
   async findAllByMember(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Orders']
