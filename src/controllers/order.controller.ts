@@ -54,36 +54,20 @@ export default {
         let query: FilterQuery<TOrder> = {};
 
         if (filter.search) query.$text = { $search: filter.search };
-        if (filter.category) query.category = filter.category;
-        if (filter.isOnline) query.isOnline = filter.isOnline;
-        if (filter.isFeatured) query.isFeatured = filter.isFeatured;
-        if (filter.isPublish) query.isPublish = filter.isPublish;
-
         return query;
       };
 
-      const {
-        limit = 10,
-        page = 1,
-        search,
-        category,
-        isOnline,
-        isFeatured,
-        isPublish,
-      } = req.query;
+      const { limit = 10, page = 1, search } = req.query;
 
       const query = buildQuery({
         search,
-        category,
-        isOnline,
-        isFeatured,
-        isPublish,
       });
 
       const result = await OrderModel.find(query)
         .limit(+limit)
         .skip((+page - 1) * +limit)
         .sort({ createdAt: -1 })
+        .lean()
         .exec();
 
       const count = await OrderModel.countDocuments(query);
@@ -107,13 +91,15 @@ export default {
       #swagger.tags = ['Orders']
     */
     try {
-      const { id } = req.params;
+      const { orderId } = req.params;
 
-      if (!isValidObjectId(id)) {
+      if (!isValidObjectId(orderId)) {
         return response.notFound(res, "Failed to find order");
       }
 
-      const result = await OrderModel.findById(id);
+      const result = await OrderModel.findOne({
+        orderId,
+      });
 
       if (!result) {
         return response.notFound(res, "Failed to find order");

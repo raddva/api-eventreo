@@ -1389,6 +1389,46 @@
         "xml": {
           "name": "RemoveMediaRequest"
         }
+      },
+      "CreateOrderRequest": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number",
+            "example": 0
+          },
+          "status": {
+            "type": "string",
+            "example": "PENDING"
+          },
+          "payment": {
+            "type": "string",
+            "example": ""
+          },
+          "events": {
+            "type": "string",
+            "example": "eventId"
+          },
+          "orderId": {
+            "type": "string",
+            "example": "orderId"
+          },
+          "ticket": {
+            "type": "string",
+            "example": "ticketId"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 1
+          },
+          "vouchers": {
+            "type": "string",
+            "example": "[{ voucherId: 'voucherId', isPrint: false }]"
+          }
+        },
+        "xml": {
+          "name": "CreateOrderRequest"
+        }
       }
     }
   }
