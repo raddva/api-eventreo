@@ -10,6 +10,7 @@ import regionController from "../controllers/region.controller";
 import eventController from "../controllers/event.controller";
 import ticketController from "../controllers/ticket.controller";
 import bannerController from "../controllers/banner.controller";
+import orderController from "../controllers/order.controller";
 
 const router = express.Router();
 
@@ -96,6 +97,12 @@ router.delete(
   [authMiddleware, aclMiddleware([ROLES.ADMIN])],
   bannerController.remove
 );
+
+// ---> Orders <---
+router.post("/orders", orderController.create);
+router.get("/orders", orderController.findAll);
+router.get("/orders/:id", orderController.findOne);
+router.put("/orders/:id/complete", orderController.findOne);
 
 // ---> Region <---
 router.get("/regions", regionController.getAllProvinces);
