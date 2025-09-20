@@ -1,6 +1,6 @@
-import { customAlphabet } from "nanoid";
+const generate = require("nanoid/generate");
 
 export const getId = (): string => {
-  const nanoid = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
-  return nanoid(5);
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  return generate(alphabet, 5);
 };
