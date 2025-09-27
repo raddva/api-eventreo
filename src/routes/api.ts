@@ -99,10 +99,26 @@ router.delete(
 );
 
 // ---> Orders <---
-router.post("/orders", orderController.create);
-router.get("/orders", orderController.findAll);
-router.get("/orders/:id", orderController.findOne);
-router.put("/orders/:id/complete", orderController.findOne);
+router.post(
+  "/orders",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
+  orderController.create
+);
+router.get(
+  "/orders",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
+  orderController.findAll
+);
+router.get(
+  "/orders/:id",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
+  orderController.findOne
+);
+router.put(
+  "/orders/:id/complete",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
+  orderController.complete
+);
 
 // ---> Region <---
 router.get("/regions", regionController.getAllProvinces);
