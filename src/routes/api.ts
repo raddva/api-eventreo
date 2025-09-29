@@ -104,20 +104,17 @@ router.post(
   [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
   orderController.create
 );
-router.get(
-  "/orders",
-  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
-  orderController.findAll
-);
-router.get(
-  "/orders/:id",
-  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
-  orderController.findOne
-);
+router.get("/orders", orderController.findAll);
+router.get("/orders/:id", orderController.findOne);
 router.put(
   "/orders/:id/complete",
   [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
   orderController.complete
+);
+router.delete(
+  "/orders/:id",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
+  orderController.remove
 );
 
 // ---> Region <---

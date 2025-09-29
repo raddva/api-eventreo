@@ -172,7 +172,7 @@ export default {
       const { id } = req.params;
 
       if (!isValidObjectId(id)) {
-        return response.notFound(res, "Failed to remove eveny");
+        return response.notFound(res, "Failed to remove event");
       }
 
       const result = await EventModel.findByIdAndDelete(id, {

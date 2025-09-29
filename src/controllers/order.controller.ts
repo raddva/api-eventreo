@@ -183,6 +183,34 @@ export default {
     }
   },
 
+  async remove(req: IReqUser, res: Response) {
+    /**
+      #swagger.tags = ['Orders']
+      #swagger.security = [{
+       "bearerAuth": {}
+      }]
+    */
+    try {
+      const { id } = req.params;
+
+      if (!isValidObjectId(id)) {
+        return response.notFound(res, "Failed to remove order");
+      }
+
+      const result = await OrderModel.findByIdAndDelete(id, {
+        new: true,
+      });
+
+      if (!result) {
+        return response.notFound(res, "Order not found");
+      }
+
+      response.success(res, result, "Success removing order");
+    } catch (err) {
+      response.error(res, err, "Failed to remove order");
+    }
+  },
+
   async findAllByMember(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Orders']
