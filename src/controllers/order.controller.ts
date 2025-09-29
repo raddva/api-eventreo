@@ -120,6 +120,9 @@ export default {
   async complete(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Orders']
+      #swagger.security = [{
+       "bearerAuth": {}
+      }]
     */
     try {
       const { orderId } = req.params;
@@ -166,8 +169,37 @@ export default {
   async pending(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Orders']
+      #swagger.security = [{
+       "bearerAuth": {}
+      }]
     */
     try {
+      const { orderId } = req.params;
+      const userId = req.user?.id;
+
+      const order = await OrderModel.findOne({ orderId, createdBy: userId });
+      if (!order) return response.notFound(res, "Order not found");
+
+      if (order.status === OrderStatus.COMPLETED) {
+        return response.success(res, order, "Order already completed");
+      } else if (order.status === OrderStatus.PENDING) {
+        return response.success(res, order, "Order in payment pending");
+      }
+
+      const result = await OrderModel.findByIdAndUpdate(
+        {
+          orderId,
+          createdBy: userId,
+        },
+        {
+          status: OrderStatus.PENDING,
+        },
+        {
+          new: true,
+        }
+      );
+
+      response.success(res, result, "Success Pending an Order");
     } catch (e) {
       response.error(res, e, "Failed to pending Order");
     }
@@ -176,8 +208,37 @@ export default {
   async cancelled(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Orders']
+      #swagger.security = [{
+       "bearerAuth": {}
+      }]
     */
     try {
+      const { id } = req.params;
+      const userId = req.user?.id;
+
+      const order = await OrderModel.findOne({ id, createdBy: userId });
+      if (!order) return response.notFound(res, `Order not found`);
+
+      if (order.status === OrderStatus.COMPLETED) {
+        return response.success(res, order, "Order already completed");
+      } else if (order.status === OrderStatus.CANCELLED) {
+        return response.success(res, order, "Order in payment cancel");
+      }
+
+      const result = await OrderModel.findByIdAndUpdate(
+        {
+          id,
+          createdBy: userId,
+        },
+        {
+          status: OrderStatus.CANCELLED,
+        },
+        {
+          new: true,
+        }
+      );
+
+      response.success(res, result, "Success Cancelled an Order");
     } catch (e) {
       response.error(res, e, "Failed to cancel Order");
     }

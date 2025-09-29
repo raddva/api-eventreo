@@ -111,6 +111,16 @@ router.put(
   [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
   orderController.complete
 );
+router.put(
+  "/orders/:id/pending",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
+  orderController.pending
+);
+router.put(
+  "/orders/:id/cancel",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
+  orderController.cancelled
+);
 router.delete(
   "/orders/:id",
   [authMiddleware, aclMiddleware([ROLES.ADMIN])],
