@@ -104,21 +104,34 @@ router.post(
   [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
   orderController.create
 );
-router.get("/orders", orderController.findAll);
-router.get("/orders/:id", orderController.findOne);
+router.get(
+  "/orders",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
+  orderController.findAll
+);
+router.get(
+  "/orders-history",
+  [authMiddleware, aclMiddleware([ROLES.MEMBER])],
+  orderController.findAllByMember
+);
+router.get(
+  "/orders/:id",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
+  orderController.findOne
+);
 router.put(
   "/orders/:id/complete",
-  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
+  [authMiddleware, aclMiddleware([ROLES.MEMBER])],
   orderController.complete
 );
 router.put(
   "/orders/:id/pending",
-  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
   orderController.pending
 );
 router.put(
   "/orders/:id/cancel",
-  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
   orderController.cancelled
 );
 router.delete(

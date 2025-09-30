@@ -175,9 +175,8 @@ export default {
     */
     try {
       const { orderId } = req.params;
-      const userId = req.user?.id;
 
-      const order = await OrderModel.findOne({ orderId, createdBy: userId });
+      const order = await OrderModel.findOne({ orderId });
       if (!order) return response.notFound(res, "Order not found");
 
       if (order.status === OrderStatus.COMPLETED) {
@@ -189,7 +188,6 @@ export default {
       const result = await OrderModel.findByIdAndUpdate(
         {
           orderId,
-          createdBy: userId,
         },
         {
           status: OrderStatus.PENDING,
@@ -214,9 +212,8 @@ export default {
     */
     try {
       const { id } = req.params;
-      const userId = req.user?.id;
 
-      const order = await OrderModel.findOne({ id, createdBy: userId });
+      const order = await OrderModel.findOne({ id });
       if (!order) return response.notFound(res, `Order not found`);
 
       if (order.status === OrderStatus.COMPLETED) {
@@ -228,7 +225,6 @@ export default {
       const result = await OrderModel.findByIdAndUpdate(
         {
           id,
-          createdBy: userId,
         },
         {
           status: OrderStatus.CANCELLED,
@@ -275,13 +271,50 @@ export default {
   async findAllByMember(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Orders']
+      #swagger.parameters['limit'] = {
+        in: 'query',
+        type: 'number',
+        default: 10
+      }
     */
     try {
-      const { slug } = req.params;
-      const result = await OrderModel.findOne({ slug });
-      response.success(res, result, "Successfully find Order by slug");
+      const userId = req.user?.id;
+      const buildQuery = (filter: any) => {
+        let query: FilterQuery<TOrder> = {
+          createdBy: userId,
+        };
+
+        if (filter.search) query.$text = { $search: filter.search };
+        return query;
+      };
+
+      const { limit = 10, page = 1, search } = req.query;
+
+      const query = buildQuery({
+        search,
+      });
+
+      const result = await OrderModel.find(query)
+        .limit(+limit)
+        .skip((+page - 1) * +limit)
+        .sort({ createdAt: -1 })
+        .lean()
+        .exec();
+
+      const count = await OrderModel.countDocuments(query);
+
+      response.pagination(
+        res,
+        result,
+        {
+          current: +page,
+          total: count,
+          totalPages: Math.ceil(count / +limit),
+        },
+        "Successfully fetched order data"
+      );
     } catch (e) {
-      response.error(res, e, "Failed to find Order");
+      response.error(res, e, "Failed to fetch Order Data");
     }
   },
 };
