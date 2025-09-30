@@ -2,7 +2,7 @@ import { Response } from "express";
 import { IReqUser } from "../utils/interfaces";
 import response from "../utils/response";
 import OrderModel, {
-  orderDAO,
+  orderDTO,
   OrderStatus,
   TOrder,
   TVoucher,
@@ -28,7 +28,7 @@ export default {
     try {
       const userId = req.user?.id;
       const payload = { ...req.body, createdBy: userId } as TOrder;
-      await orderDAO.validate(payload);
+      await orderDTO.validate(payload);
 
       const ticket = await TicketModel.findById(payload.ticket);
       if (!ticket) return response.notFound(res, "Ticket not found");

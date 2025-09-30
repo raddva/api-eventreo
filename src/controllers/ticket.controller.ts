@@ -2,7 +2,7 @@ import { Response } from "express";
 import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 import response from "../utils/response";
 import { FilterQuery, isValidObjectId } from "mongoose";
-import TicketModel, { ticketDAO, TicketType } from "../models/ticket.model";
+import TicketModel, { ticketDTO, TicketType } from "../models/ticket.model";
 
 export default {
   async create(req: IReqUser, res: Response) {
@@ -19,7 +19,7 @@ export default {
       }
     */
     try {
-      await ticketDAO.validate(req.body);
+      await ticketDTO.validate(req.body);
       const result = await TicketModel.create(req.body);
       response.success(res, result, "Successfully created Ticket");
     } catch (e) {

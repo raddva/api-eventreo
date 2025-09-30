@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { IPaginationQuery, IReqUser } from "../utils/interfaces";
-import CategoryModel, { categoryDAO } from "../models/category.model";
+import CategoryModel, { categoryDTO } from "../models/category.model";
 import response from "../utils/response";
 import { isValidObjectId } from "mongoose";
 
@@ -19,7 +19,7 @@ export default {
       }
     */
     try {
-      await categoryDAO.validate(req.body);
+      await categoryDTO.validate(req.body);
       const result = await CategoryModel.create(req.body);
       response.success(res, result, "Successfully created category");
     } catch (e) {

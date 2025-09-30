@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { IPaginationQuery, IReqUser } from "../utils/interfaces";
-import BannerModel, { bannerDAO, TBanner } from "../models/banner.model";
+import BannerModel, { bannerDTO, TBanner } from "../models/banner.model";
 import response from "../utils/response";
 import { FilterQuery, isValidObjectId } from "mongoose";
 
@@ -19,7 +19,7 @@ export default {
       }
     */
     try {
-      await bannerDAO.validate(req.body);
+      await bannerDTO.validate(req.body);
       const result = await BannerModel.create(req.body);
       response.success(res, result, "Successfully created banner");
     } catch (e) {
