@@ -38,6 +38,15 @@ const doc = {
       ActivationRequest: {
         code: "xyz",
       },
+      UpdateProfileRequest: {
+        fullName: "",
+        profilePicture: "",
+      },
+      UpdatePasswordRequest: {
+        oldPassword: "",
+        password: "",
+        confirmPassword: "",
+      },
       CreateCategoryRequest: {
         name: "",
         description: "",

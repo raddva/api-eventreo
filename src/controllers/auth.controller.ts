@@ -1,54 +1,88 @@
 import { Request, Response } from "express";
 import * as Yup from "yup";
-import UserModel from "../models/user.model";
+import UserModel, {
+  userDTO,
+  userLoginDTO,
+  userUpdatePasswordDTO,
+} from "../models/user.model";
 import { encrypt } from "../utils/encryption";
 import { generateToken } from "../utils/jwt";
 import { IReqUser } from "../utils/interfaces";
 import response from "../utils/response";
 
-type TRegister = {
-  fullName: string;
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
-
-type TLogin = {
-  identifier: string;
-  password: string;
-};
-
-const registerValidationSchema = Yup.object().shape({
-  fullName: Yup.string().required("Full name is required"),
-  username: Yup.string().required("Username is required"),
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string()
-    .required()
-    .min(6, "Password must be at least 6 characters")
-    .test(
-      "at-least-one-uppercase-letter",
-      "Password must contain at least one uppercase letter",
-      (value) => {
-        if (!value) return false;
-        const regex = /^(?=.*[A-Z])/;
-        return regex.test(value);
-      }
-    )
-    .test(
-      "at-least-one-number",
-      "Password must contain at least one number",
-      (value) => {
-        if (!value) return false;
-        const regex = /^(?=.*\d)/;
-        return regex.test(value);
-      }
-    ),
-  confirmPassword: Yup.string()
-    .required()
-    .oneOf([Yup.ref("password"), ""], "Passwords must match"),
-});
 export default {
+  async updateProfile(req: IReqUser, res: Response) {
+    /**
+    #swagger.tags = ["Auth"]
+    #swagger.security = [{
+      "bearerAuth": {}
+    }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {$ref: "#/components/schemas/UpdateProfileRequest"}
+    }
+    */
+    try {
+      const userId = req.user?.id;
+      const { fullName, profilePicture } = req.body;
+      const result = await UserModel.findByIdAndUpdate(
+        userId,
+        {
+          fullName,
+          profilePicture,
+        },
+        {
+          new: true,
+        }
+      );
+
+      if (!result) return response.notFound(res, "User not Found");
+
+      response.success(res, result, "Success updating profile");
+    } catch (error) {
+      response.error(res, error, "Failed updating user profile");
+    }
+  },
+  async updatePassword(req: IReqUser, res: Response) {
+    /**
+    #swagger.tags = ["Auth"]
+    #swagger.security = [{
+      "bearerAuth": {}
+    }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {$ref: "#/components/schemas/UpdatePasswordRequest"}
+    }
+    */
+    try {
+      const userId = req.user?.id;
+      const { oldPassword, password, confirmPassword } = req.body;
+      await userUpdatePasswordDTO.validate({
+        oldPassword,
+        password,
+        confirmPassword,
+      });
+
+      const user = await UserModel.findById(userId);
+
+      if (!user || user.password !== encrypt(oldPassword))
+        return response.notFound(res, "User not Found");
+
+      const result = await UserModel.findByIdAndUpdate(
+        userId,
+        {
+          password: encrypt(password),
+        },
+        {
+          new: true,
+        }
+      );
+
+      response.success(res, result, "Success update user password");
+    } catch (error) {
+      response.error(res, error, "Failed updating password");
+    }
+  },
   async register(req: Request, res: Response) {
     /**
     #swagger.tags = ["Auth"]
@@ -57,11 +91,10 @@ export default {
         schema: {$ref: "#/components/schemas/RegisterRequest"}
     }
     */
-    const { fullName, username, email, password, confirmPassword } =
-      req.body as unknown as TRegister;
+    const { fullName, username, email, password, confirmPassword } = req.body;
 
     try {
-      await registerValidationSchema.validate({
+      await userDTO.validate({
         fullName,
         username,
         email,
@@ -85,12 +118,17 @@ export default {
     /**
      #swagger.tags = ["Auth"]
      #swagger.requestBody = {
-     required: true,
-     schema: {$ref: "#/components/schemas/LoginRequest"}
+          required: true,
+          schema: {$ref: "#/components/schemas/LoginRequest"}
      }
      */
-    const { identifier, password } = req.body as unknown as TLogin;
     try {
+      const { identifier, password } = req.body;
+      await userLoginDTO.validate({
+        identifier,
+        password,
+      });
+
       const userByIdentifier = await UserModel.findOne({
         $or: [
           {

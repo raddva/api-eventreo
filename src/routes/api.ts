@@ -19,6 +19,16 @@ router.post("/auth/register", authController.register);
 router.post("/auth/login", authController.login);
 router.get("/auth/profile", authMiddleware, authController.profile);
 router.post("/auth/activation", authController.activation);
+router.put(
+  "/auth/update-profile",
+  [authMiddleware, aclMiddleware([ROLES.MEMBER])],
+  authController.updateProfile
+);
+router.put(
+  "/auth/update-password",
+  [authMiddleware, aclMiddleware([ROLES.MEMBER])],
+  authController.updatePassword
+);
 
 // ---> Category <---
 router.post(
