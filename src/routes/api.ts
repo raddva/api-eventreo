@@ -116,12 +116,12 @@ router.post(
 );
 router.get(
   "/orders",
-  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
+  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
   orderController.findAll
 );
 router.get(
   "/orders-history",
-  [authMiddleware, aclMiddleware([ROLES.MEMBER])],
+  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
   orderController.findAllByMember
 );
 router.get(
