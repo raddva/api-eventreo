@@ -1068,27 +1068,18 @@
             "schema": {
               "type": "number"
             }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
           "default": {
             "description": ""
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       }
     },
     "/orders-history": {
@@ -1112,27 +1103,18 @@
             "schema": {
               "type": "number"
             }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
           "default": {
             "description": ""
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       }
     },
     "/orders/{id}": {
@@ -1162,7 +1144,12 @@
           "default": {
             "description": ""
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
       },
       "delete": {
         "tags": [

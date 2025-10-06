@@ -95,6 +95,7 @@ export default {
       response.error(res, e, "Failed to fetch Order Data");
     }
   },
+
   async findOne(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Orders']
@@ -103,15 +104,13 @@ export default {
       }]
     */
     try {
-      const { orderId } = req.params;
+      const { id } = req.params;
 
-      if (!isValidObjectId(orderId)) {
+      if (!isValidObjectId(id)) {
         return response.notFound(res, "Failed to find order");
       }
 
-      const result = await OrderModel.findOne({
-        orderId,
-      });
+      const result = await OrderModel.findOne({ _id: id });
 
       if (!result) {
         return response.notFound(res, "Failed to find order");
@@ -131,10 +130,10 @@ export default {
       }]
     */
     try {
-      const { orderId } = req.params;
+      const { id } = req.params;
       const userId = req.user?.id;
 
-      const order = await OrderModel.findOne({ orderId, createdBy: userId });
+      const order = await OrderModel.findOne({ id, createdBy: userId });
       if (!order) return response.notFound(res, "Order not found");
 
       if (order.status === "COMPLETED")
@@ -149,7 +148,7 @@ export default {
 
       const result = await OrderModel.findOneAndUpdate(
         {
-          orderId,
+          id,
           createdBy: userId,
         },
         { vouchers, status: OrderStatus.COMPLETED },
@@ -180,9 +179,9 @@ export default {
       }]
     */
     try {
-      const { orderId } = req.params;
+      const { id } = req.params;
 
-      const order = await OrderModel.findOne({ orderId });
+      const order = await OrderModel.findOne({ id });
       if (!order) return response.notFound(res, "Order not found");
 
       if (order.status === OrderStatus.COMPLETED) {
@@ -193,7 +192,7 @@ export default {
 
       const result = await OrderModel.findByIdAndUpdate(
         {
-          orderId,
+          id,
         },
         {
           status: OrderStatus.PENDING,
@@ -277,6 +276,9 @@ export default {
   async findAllByMember(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Orders']
+      #swagger.security = [{
+       "bearerAuth": {}
+      }]
       #swagger.parameters['limit'] = {
         in: 'query',
         type: 'number',
