@@ -49,6 +49,9 @@ export default {
   async findAll(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Orders']
+      #swagger.security = [{
+       "bearerAuth": {}
+      }]
       #swagger.parameters['limit'] = {
         in: 'query',
         type: 'number',
@@ -95,6 +98,9 @@ export default {
   async findOne(req: IReqUser, res: Response) {
     /**
       #swagger.tags = ['Orders']
+      #swagger.security = [{
+       "bearerAuth": {}
+      }]
     */
     try {
       const { orderId } = req.params;
