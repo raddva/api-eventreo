@@ -104,13 +104,13 @@ export default {
       }]
     */
     try {
-      const { id } = req.params;
+      const { orderId } = req.params;
 
-      if (!isValidObjectId(id)) {
+      if (!isValidObjectId(orderId)) {
         return response.notFound(res, "Failed to find order");
       }
 
-      const result = await OrderModel.findOne({ _id: id });
+      const result = await OrderModel.findOne({ orderId });
 
       if (!result) {
         return response.notFound(res, "Failed to find order");

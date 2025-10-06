@@ -1117,7 +1117,7 @@
         ]
       }
     },
-    "/orders/{id}": {
+    "/orders/{orderId}": {
       "get": {
         "tags": [
           "Orders"
@@ -1125,40 +1125,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": {}
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "Orders"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
+            "name": "orderId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1257,6 +1224,41 @@
     },
     "/orders/{id}/cancel": {
       "put": {
+        "tags": [
+          "Orders"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
+      }
+    },
+    "/orders/{id}": {
+      "delete": {
         "tags": [
           "Orders"
         ],

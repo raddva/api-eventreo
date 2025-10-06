@@ -125,7 +125,7 @@ router.get(
   orderController.findAllByMember
 );
 router.get(
-  "/orders/:id",
+  "/orders/:orderId",
   [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
   orderController.findOne
 );
