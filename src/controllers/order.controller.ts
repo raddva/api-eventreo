@@ -106,10 +106,6 @@ export default {
     try {
       const { orderId } = req.params;
 
-      if (!isValidObjectId(orderId)) {
-        return response.notFound(res, "Failed to find order");
-      }
-
       const result = await OrderModel.findOne({ orderId });
 
       if (!result) {
