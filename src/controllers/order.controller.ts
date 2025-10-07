@@ -251,9 +251,7 @@ export default {
     try {
       const { orderId } = req.params;
 
-      const result = await OrderModel.findByIdAndDelete(orderId, {
-        new: true,
-      });
+      const result = await OrderModel.findOneAndDelete({ orderId: orderId });
 
       if (!result) {
         return response.notFound(res, "Order not found");
