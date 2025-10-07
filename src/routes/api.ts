@@ -130,22 +130,22 @@ router.get(
   orderController.findOne
 );
 router.put(
-  "/orders/:id/complete",
+  "/orders/:orderId/complete",
   [authMiddleware, aclMiddleware([ROLES.MEMBER])],
   orderController.complete
 );
 router.put(
-  "/orders/:id/pending",
+  "/orders/:orderId/pending",
   [authMiddleware, aclMiddleware([ROLES.ADMIN])],
   orderController.pending
 );
 router.put(
-  "/orders/:id/cancel",
+  "/orders/:orderId/cancel",
   [authMiddleware, aclMiddleware([ROLES.ADMIN])],
   orderController.cancelled
 );
 router.delete(
-  "/orders/:id",
+  "/orders/:orderId",
   [authMiddleware, aclMiddleware([ROLES.ADMIN])],
   orderController.remove
 );

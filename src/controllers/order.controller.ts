@@ -126,10 +126,10 @@ export default {
       }]
     */
     try {
-      const { id } = req.params;
+      const { orderId } = req.params;
       const userId = req.user?.id;
 
-      const order = await OrderModel.findOne({ id, createdBy: userId });
+      const order = await OrderModel.findOne({ orderId, createdBy: userId });
       if (!order) return response.notFound(res, "Order not found");
 
       if (order.status === "COMPLETED")
@@ -144,7 +144,7 @@ export default {
 
       const result = await OrderModel.findOneAndUpdate(
         {
-          id,
+          orderId,
           createdBy: userId,
         },
         { vouchers, status: OrderStatus.COMPLETED },
@@ -175,9 +175,9 @@ export default {
       }]
     */
     try {
-      const { id } = req.params;
+      const { orderId } = req.params;
 
-      const order = await OrderModel.findOne({ id });
+      const order = await OrderModel.findOne({ orderId });
       if (!order) return response.notFound(res, "Order not found");
 
       if (order.status === OrderStatus.COMPLETED) {
@@ -188,7 +188,7 @@ export default {
 
       const result = await OrderModel.findByIdAndUpdate(
         {
-          id,
+          orderId,
         },
         {
           status: OrderStatus.PENDING,
@@ -212,9 +212,9 @@ export default {
       }]
     */
     try {
-      const { id } = req.params;
+      const { orderId } = req.params;
 
-      const order = await OrderModel.findOne({ id });
+      const order = await OrderModel.findOne({ orderId });
       if (!order) return response.notFound(res, `Order not found`);
 
       if (order.status === OrderStatus.COMPLETED) {
@@ -225,7 +225,7 @@ export default {
 
       const result = await OrderModel.findByIdAndUpdate(
         {
-          id,
+          orderId,
         },
         {
           status: OrderStatus.CANCELLED,
@@ -249,13 +249,9 @@ export default {
       }]
     */
     try {
-      const { id } = req.params;
+      const { orderId } = req.params;
 
-      if (!isValidObjectId(id)) {
-        return response.notFound(res, "Failed to remove order");
-      }
-
-      const result = await OrderModel.findByIdAndDelete(id, {
+      const result = await OrderModel.findByIdAndDelete(orderId, {
         new: true,
       });
 
